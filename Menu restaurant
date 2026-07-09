@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recherche plats Neuchâtel iPhone</title>
+
+<style>
+body {
+  font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+  background: #f2f2f2;
+  margin: 12px;
+  color: #222;
+}
+
+h1 {
+  font-size: 26px;
+  margin: 8px 0 14px;
+}
+
+.box {
+  background: white;
+  padding: 12px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+input {
+  width: 100%;
+  font-size: 22px;
+  padding: 14px;
+  border: 2px solid #333;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+button {
+  width: 100%;
+  font-size: 20px;
+  padding: 12px;
+  margin-top: 10px;
+  border: 0;
+  border-radius: 10px;
+  background: #222;
+  color: white;
+}
+
+#count {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.resto {
+  font-size: 14px;
+  color: #666;
+  font-weight: bold;
+}
+
+h2 {
+  font-size: 21px;
+  margin: 6px 0;
+}
+
+.cat {
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.desc {
+  color: #333;
+}
+
+.prix {
+  font-weight: bold;
+  font-size: 18px;
+  margin-top: 8px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Recherche de plats</h1>
+
+<div class="box">
+  <input id="q" type="text" placeholder="salade, perche, tartare, fondue">
+
+  <button onclick="search()">Rechercher</button>
+  <button onclick="resetSearch()">Tout afficher</button>
+
+  <div id="count"></div>
+</div>
+
+<div id="results">
+
+  <article class="card" data-search="le printemps au cardinal entrées salade mêlée petite ou grande 9 / 16">
+    <div class="resto">Le Printemps au Cardinal</div>
+    <h2>Salade mêlée</h2>
+    <div class="cat">Entrées</div>
+    <div class="desc">Petite ou grande</div>
+    <div class="prix">9 / 16 CHF</div>
+  </article>
+
+  <article class="card" data-search="maison sterchi classiques fondue de la maison sterchi 200 g personne 24">
+    <div class="resto">Maison Sterchi</div>
+    <h2>Fondue de la maison Sterchi</h2>
+    <div class="cat">Classiques</div>
+    <div class="desc">200 g/personne</div>
+    <div class="prix">24 CHF</div>
+  </article>
+
+  <article class="card" data-search="restaurant du cercle de la voile salade verte entrées 5">
+    <div class="resto">Restaurant du Cercle de la Voile de Neuchâtel</div>
+    <h2>Salade verte</h2>
+    <div class="cat">Entrées</div>
+    <div class="desc"></div>
+    <div class="prix">5 CHF</div>
+  </article>
+
+  <article class="card" data-search="la charrue fondue bourguignonne de bœuf fondues 37">
+    <div class="resto">La Charrue</div>
+    <h2>Fondue bourguignonne de bœuf</h2>
+    <div class="cat">Fondues</div>
+    <div class="desc">220 g</div>
+    <div class="prix">37 CHF</div>
+  </article>
+
+  <article class="card" data-search="écluse 13 filet de bœuf viandes 47">
+    <div class="resto">Écluse 13</div>
+    <h2>Filet de bœuf</h2>
+    <div class="cat">Viandes</div>
+    <div class="desc">Environ 200 g, origine CH</div>
+    <div class="prix">47 CHF</div>
+  </article>
+
+  <article class="card" data-search="la terrasse filets de perche meunière plats sauce chasselas beurre noisette 42">
+    <div class="resto">La Terrasse</div>
+    <h2>Filets de perche meunière</h2>
+    <div class="cat">Plats</div>
+    <div class="desc">Sauce Chasselas ou beurre noisette</div>
+    <div class="prix">42 CHF</div>
+  </article>
+
+</div>
+
+<script>
+function clean(s) {
+  s = String(s).toLowerCase();
+  s = s.replace(/[àáâãäå]/g, 'a');
+  s = s.replace(/[èéêë]/g, 'e');
+  s = s.replace(/[ìíîï]/g, 'i');
+  s = s.replace(/[òóôõö]/g, 'o');
+  s = s.replace(/[ùúûü]/g, 'u');
+  s = s.replace(/[ç]/g, 'c');
+  s = s.replace(/[œ]/g, 'oe');
+  return s;
+}
+
+function search() {
+  var q = clean(document.getElementById('q').value);
+  var cards = document.getElementsByClassName('card');
+  var n = 0;
+
+  for (var i = 0; i < cards.length; i++) {
+    var txt = clean(cards[i].getAttribute('data-search'));
+
+    if (q === '' || txt.indexOf(q) >= 0) {
+      cards[i].style.display = 'block';
+      n++;
+    } else {
+      cards[i].style.display = 'none';
+    }
+  }
+
+  document.getElementById('count').innerHTML = n + ' résultat(s)';
+}
+
+function resetSearch() {
+  document.getElementById('q').value = '';
+  search();
+}
+
+document.getElementById('q').onkeyup = function() {
+  search();
+};
+
+search();
+</script>
+
+</body>
+</html>
