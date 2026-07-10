@@ -960,7 +960,31 @@ function chargerDepuisMemoire() {
   }
 }
 
-chargerDepuisMemoire();
+async function chargerCsvGitHub() {
+    try {
+        elements.etatChargement.textContent = "Chargement automatique...";
+
+        const reponse = await fetch("./Restaurants_Neuchatel_Complet_Valide.csv");
+
+        if (!reponse.ok) {
+            throw new Error("Impossible de charger le fichier");
+        }
+
+        const texte = await reponse.text();
+
+        chargerTexteCsv(
+            texte,
+            "Restaurants_Neuchatel_Complet_Valide.csv",
+            false
+        );
+
+    } catch (e) {
+        console.warn(e);
+        chargerDepuisMemoire();}
+    }
+}
+
+chargerCsvGitHub();
 
 </script>
 <div id="toastCopie" class="toast-copie" role="status" aria-live="polite"></div>
