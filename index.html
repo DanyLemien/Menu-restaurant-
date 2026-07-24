@@ -909,11 +909,18 @@ function verifierDonnees(plats){
     throw new Error("Aucune ligne exploitable n’a été trouvée.");
   }
 
-  const ligneValide = plats.find(plat=>plat.restaurant || plat.plat);
+  const contientRestaurant = plats.some(plat=>Boolean(plat.restaurant));
+  const contientPlat = plats.some(plat=>Boolean(plat.plat));
 
-  if(!ligneValide || !ligneValide.restaurant || !ligneValide.plat){
+  if(!contientRestaurant){
     throw new Error(
-      "Les colonnes « Nom officiel du restaurant » et « Nom du plat » sont obligatoires."
+      "La colonne « Nom officiel du restaurant » est absente ou vide."
+    );
+  }
+
+  if(!contientPlat){
+    throw new Error(
+      "La colonne « Nom du plat » est absente ou vide."
     );
   }
 }
@@ -967,7 +974,8 @@ function afficherErreur(erreur){
   elements.etatChargement.textContent =
     "Impossible de charger « " +
     NOM_FICHIER_CSV +
-    " ». Vérifiez que le nom est exact et que le CSV se trouve dans le même dossier que index.html.";
+    " ». Détail : " +
+    (erreur && erreur.message ? erreur.message : "erreur inconnue");
 }
 
 async function chargerCsvGitHub(){
@@ -1791,3 +1799,4 @@ chargerCsvGitHub();
 </script>
 </body>
 </html>
+
