@@ -1755,8 +1755,16 @@ async function chargerCsvGitHub(){
       false
     );
   }catch(erreur){
-    console.warn(erreur);
-    chargerDepuisMemoire();
+    console.error(erreur);
+
+    elements.application.classList.add("cache");
+    elements.zoneChargement.classList.remove("cache");
+
+    elements.etatChargement.className = "etat erreur";
+    elements.etatChargement.textContent =
+      "Impossible de charger le fichier " +
+      NOM_FICHIER_CSV +
+      ". Vérifiez que le fichier CSV se trouve dans le même dossier que index.html.";
   }
 }
 
