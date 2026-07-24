@@ -4,7 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#12733d">
-<title>Restaurants de Neuchâtel — recherche par plats</title>
+<title>Restaurants de Neuchâtel</title>
+
+<!--
+=======================================================================
+À MODIFIER LORSQUE LE FICHIER CSV CHANGE
+Le même nom est également placé au début du JavaScript.
+Nom actuel : Restaurant_Neuchatel_2026-07-23.csv
+=======================================================================
+-->
 
 <style>
 :root{
@@ -12,12 +20,11 @@
   --carte:#ffffff;
   --texte:#18211c;
   --secondaire:#5d6861;
-  --primaire:#12733d;
-  --primaire-fonce:#0b542c;
-  --primaire-clair:#e7f4ec;
-  --accent:#d5232f;
-  --accent-clair:#fff0f1;
-  --danger:#b51f2a;
+  --vert:#12733d;
+  --vert-fonce:#0b542c;
+  --vert-clair:#e7f4ec;
+  --rouge:#d5232f;
+  --rouge-clair:#fff0f1;
   --bordure:#d7e1da;
   --ombre:0 8px 24px rgba(18,115,61,.10);
 }
@@ -39,34 +46,31 @@ button{touch-action:manipulation}
 .cache{display:none!important}
 
 .page{
-  width:min(920px,100%);
+  width:min(940px,100%);
   margin:0 auto;
   padding:14px;
 }
 
 .entete{
-  background:
-    linear-gradient(
-      115deg,
-      #0b6b36 0%,
-      #15924f 37%,
-      #ffffff 37%,
-      #ffffff 64%,
-      #d5232f 64%,
-      #b91824 100%
-    );
-  color:#162019;
-  border-radius:18px;
-  padding:20px;
-  box-shadow:var(--ombre);
   margin-bottom:14px;
+  padding:20px;
+  border-radius:18px;
+  background:linear-gradient(
+    115deg,
+    #0b6b36 0%,
+    #15924f 37%,
+    #fff 37%,
+    #fff 64%,
+    #d5232f 64%,
+    #b91824 100%
+  );
+  box-shadow:var(--ombre);
 }
 
 .entete h1{
   margin:0 0 8px;
-  font-size:clamp(25px,6vw,36px);
+  font-size:clamp(26px,6vw,38px);
   line-height:1.08;
-  text-shadow:0 1px 0 rgba(255,255,255,.65);
 }
 
 .entete p{
@@ -79,80 +83,53 @@ button{touch-action:manipulation}
 .panneau{
   margin-bottom:14px;
   padding:16px;
-  background:var(--carte);
   border-radius:16px;
+  background:var(--carte);
   box-shadow:var(--ombre);
 }
 
 .panneau h2{
   margin:0 0 10px;
-  font-size:20px;
-}
-
-.explication{
-  margin:0 0 14px;
-  color:var(--secondaire);
-}
-
-.fichier-label,
-.bouton-principal,
-.bouton-secondaire{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  width:100%;
-  min-height:50px;
-  padding:12px 15px;
-  border-radius:12px;
-  font-weight:750;
-  text-align:center;
-  cursor:pointer;
-}
-
-.fichier-label,
-.bouton-principal{
-  border:0;
-  background:var(--primaire);
-  color:#fff;
-}
-
-.fichier-label input{
-  position:absolute;
-  left:-9999px;
-}
-
-.bouton-secondaire{
-  border:2px solid var(--primaire);
-  background:#fff;
-  color:var(--primaire);
+  font-size:21px;
 }
 
 .etat{
-  margin-top:12px;
-  padding:11px 12px;
-  border-radius:10px;
-  background:#f4f7f9;
+  padding:13px;
+  border-radius:11px;
+  background:#f4f7f5;
   color:var(--secondaire);
-}
-
-.etat.erreur{
-  background:#fff0f0;
-  color:var(--danger);
-  font-weight:650;
 }
 
 .etat.succes{
   background:#edf8f0;
   color:#236334;
+  font-weight:700;
 }
 
-.memoire-info{
-  margin-top:10px;
-  padding:10px 12px;
-  border-radius:10px;
-  background:linear-gradient(90deg,var(--primaire-clair),#fff,var(--accent-clair));
-  color:var(--secondaire);
-  font-size:14px;
+.etat.erreur{
+  background:#fff0f1;
+  color:#a51d27;
+  font-weight:700;
+}
+
+.fichier-manuel{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  min-height:50px;
+  margin-top:12px;
+  padding:12px 15px;
+  border-radius:12px;
+  background:var(--vert);
+  color:#fff;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.fichier-manuel input{
+  position:absolute;
+  left:-9999px;
 }
 
 .barre-fichier{
@@ -173,8 +150,8 @@ button{touch-action:manipulation}
   border:1px solid var(--bordure);
   border-radius:10px;
   background:#fff;
-  color:var(--primaire);
-  font-weight:700;
+  color:var(--vert);
+  font-weight:750;
   cursor:pointer;
 }
 
@@ -186,16 +163,16 @@ button{touch-action:manipulation}
 }
 
 .stat{
-  padding:11px;
+  padding:12px;
   border-radius:12px;
-  background:var(--primaire-clair);
+  background:var(--vert-clair);
   text-align:center;
 }
 
 .stat strong{
   display:block;
-  color:var(--primaire);
-  font-size:24px;
+  color:var(--vert);
+  font-size:25px;
 }
 
 .stat span{
@@ -203,20 +180,13 @@ button{touch-action:manipulation}
   font-size:13px;
 }
 
-.recherche-grid{
-  display:grid;
-  gap:10px;
-}
+.recherche-zone{position:relative}
 
-.recherche-zone,
-.recherche-saisie,
-.multi-filtre{
-  position:relative;
-}
+.recherche-saisie{position:relative}
 
 .champ{
   width:100%;
-  min-height:50px;
+  min-height:52px;
   padding:11px 54px 11px 13px;
   border:2px solid var(--bordure);
   border-radius:12px;
@@ -227,7 +197,7 @@ button{touch-action:manipulation}
 
 .champ:focus{
   outline:3px solid rgba(18,115,61,.16);
-  border-color:var(--primaire);
+  border-color:var(--vert);
 }
 
 .effacer-recherche{
@@ -240,22 +210,21 @@ button{touch-action:manipulation}
   border:0;
   border-radius:50%;
   background:#e7eee9;
-  color:var(--primaire-fonce);
+  color:var(--vert-fonce);
   font-size:25px;
-  font-weight:800;
-  line-height:1;
+  font-weight:850;
   cursor:pointer;
 }
 
 .suggestions{
   position:absolute;
-  z-index:50;
+  z-index:100;
   top:calc(100% + 6px);
   right:0;
   left:0;
-  max-height:330px;
+  max-height:320px;
   overflow:auto;
-  border:2px solid var(--primaire);
+  border:2px solid var(--vert);
   border-radius:12px;
   background:#fff;
   box-shadow:0 14px 32px rgba(0,0,0,.18);
@@ -266,10 +235,10 @@ button{touch-action:manipulation}
   top:0;
   padding:9px 12px;
   border-bottom:1px solid var(--bordure);
-  background:var(--primaire-clair);
-  color:var(--primaire-fonce);
+  background:var(--vert-clair);
+  color:var(--vert-fonce);
   font-size:13px;
-  font-weight:800;
+  font-weight:850;
 }
 
 .suggestion{
@@ -281,22 +250,24 @@ button{touch-action:manipulation}
   background:#fff;
   color:var(--texte);
   text-align:left;
-  font-weight:700;
+  font-weight:750;
   cursor:pointer;
 }
 
 .suggestion:last-child{border-bottom:0}
-.suggestion:active,
-.suggestion.active{
-  background:var(--primaire-clair);
-  color:var(--primaire-fonce);
+.suggestion:active,.suggestion.active{
+  background:var(--vert-clair);
+  color:var(--vert-fonce);
 }
 
 .filtres{
   display:grid;
   grid-template-columns:1fr;
   gap:10px;
+  margin-top:10px;
 }
+
+.multi-filtre{position:relative}
 
 .multi-bouton{
   display:flex;
@@ -310,19 +281,18 @@ button{touch-action:manipulation}
   background:#fff;
   color:var(--texte);
   text-align:left;
-  font-weight:700;
+  font-weight:750;
   cursor:pointer;
 }
 
 .multi-bouton::after{
   content:"▾";
-  color:var(--primaire);
-  font-size:18px;
+  color:var(--vert);
 }
 
 .multi-bouton.actif{
-  border-color:var(--primaire);
-  background:var(--primaire-clair);
+  border-color:var(--vert);
+  background:var(--vert-clair);
 }
 
 .multi-liste{
@@ -345,14 +315,14 @@ button{touch-action:manipulation}
   cursor:pointer;
 }
 
-.multi-option:active{background:var(--primaire-clair)}
+.multi-option:active{background:var(--vert-clair)}
 
 .multi-option input{
   flex:0 0 auto;
   width:22px;
   height:22px;
   margin:0;
-  accent-color:var(--primaire);
+  accent-color:var(--vert);
 }
 
 .multi-option span{
@@ -360,10 +330,23 @@ button{touch-action:manipulation}
   line-height:1.25;
 }
 
+.effacer-filtres{
+  width:100%;
+  min-height:50px;
+  margin-top:10px;
+  padding:11px 13px;
+  border:2px solid var(--vert);
+  border-radius:12px;
+  background:#fff;
+  color:var(--vert);
+  font-weight:800;
+  cursor:pointer;
+}
+
 .compteur{
   margin:14px 2px 10px;
-  color:var(--primaire);
-  font-weight:800;
+  color:var(--vert);
+  font-weight:850;
 }
 
 .resultats{
@@ -376,25 +359,23 @@ button{touch-action:manipulation}
   padding:0;
   overflow:hidden;
   border:1px solid var(--bordure);
-  border-left:5px solid var(--primaire);
+  border-left:5px solid var(--vert);
   border-radius:16px;
-  background:var(--carte);
+  background:#fff;
   color:inherit;
   text-align:left;
   box-shadow:0 4px 14px rgba(18,115,61,.08);
   cursor:pointer;
 }
 
-.carte-plat:active{transform:scale(.995)}
-
 .carte-tete{
   padding:12px 14px;
   border-bottom:1px solid var(--bordure);
-  background:linear-gradient(90deg,var(--primaire-clair),#fff);
+  background:linear-gradient(90deg,var(--vert-clair),#fff);
 }
 
 .resto{
-  color:var(--primaire);
+  color:var(--vert);
   font-size:15px;
   font-weight:850;
 }
@@ -408,7 +389,7 @@ button{touch-action:manipulation}
 .carte-corps{padding:14px}
 
 .plat{
-  margin:0 0 5px;
+  margin:0 0 6px;
   font-size:21px;
   line-height:1.16;
 }
@@ -418,10 +399,10 @@ button{touch-action:manipulation}
   margin-bottom:9px;
   padding:4px 9px;
   border-radius:999px;
-  background:var(--accent);
+  background:var(--rouge);
   color:#fff;
   font-size:13px;
-  font-weight:800;
+  font-weight:850;
 }
 
 .description{
@@ -430,7 +411,7 @@ button{touch-action:manipulation}
 }
 
 .prix{
-  color:var(--primaire);
+  color:var(--vert);
   font-size:20px;
   font-weight:900;
 }
@@ -492,7 +473,6 @@ button{touch-action:manipulation}
 .modal-barre h2{
   margin:3px 0 0;
   font-size:24px;
-  line-height:1.15;
 }
 
 .fermer{
@@ -504,7 +484,6 @@ button{touch-action:manipulation}
   background:#fff;
   font-size:25px;
   cursor:pointer;
-  box-shadow:0 2px 10px rgba(0,0,0,.12);
 }
 
 .bloc{
@@ -517,18 +496,18 @@ button{touch-action:manipulation}
 
 .bloc h3{
   margin:0 0 10px;
-  color:var(--primaire);
+  color:var(--vert);
   font-size:18px;
 }
 
 .plat-selectionne{
   border:1px solid #b8d8c5;
-  background:linear-gradient(135deg,var(--primaire-clair),#fff);
+  background:linear-gradient(135deg,var(--vert-clair),#fff);
 }
 
-.alerte-fermeture{
-  border-left:5px solid var(--accent);
-  background:linear-gradient(90deg,var(--accent-clair),#fff);
+.restaurant-selectionne{
+  border-left:5px solid var(--rouge);
+  background:linear-gradient(90deg,var(--rouge-clair),#fff);
 }
 
 .fiche-grid{
@@ -548,13 +527,13 @@ button{touch-action:manipulation}
   margin-bottom:2px;
   color:var(--secondaire);
   font-size:12px;
-  font-weight:800;
+  font-weight:850;
   letter-spacing:.04em;
   text-transform:uppercase;
 }
 
 .valeur{
-  font-weight:600;
+  font-weight:650;
   white-space:pre-line;
   overflow-wrap:anywhere;
 }
@@ -564,55 +543,40 @@ button{touch-action:manipulation}
   padding:12px 14px;
   border:1px solid var(--bordure);
   border-radius:12px;
-  background:linear-gradient(90deg,var(--primaire-clair),#fff,var(--accent-clair));
-}
-
-.provenance .libelle{color:var(--primaire-fonce)}
-
-.note-liens{
-  margin:12px 0 0;
-  padding:12px;
-  border:1px solid #d8b3b7;
-  border-radius:12px;
-  background:linear-gradient(90deg,#eef7f1,#fff,#faeeee);
-  font-size:14px;
+  background:linear-gradient(90deg,var(--vert-clair),#fff,var(--rouge-clair));
 }
 
 .actions{
   display:grid;
   grid-template-columns:1fr;
   gap:9px;
-  margin-top:10px;
+  margin-top:12px;
 }
 
-.action-lien{
-  display:flex;
-  align-items:center;
-  justify-content:center;
+.action-copie{
   min-height:46px;
   padding:10px;
   border:0;
   border-radius:11px;
-  background:var(--primaire);
+  background:var(--vert);
   color:#fff;
-  font-weight:800;
-  text-align:center;
+  font-weight:850;
   cursor:pointer;
 }
 
-.action-lien.secondaire{
-  border:2px solid var(--primaire);
+.action-copie.secondaire{
+  border:2px solid var(--vert);
   background:#fff;
-  color:var(--primaire);
+  color:var(--vert);
 }
 
-.action-lien.rouge{
-  border:2px solid var(--accent);
+.action-copie.rouge{
+  border:2px solid var(--rouge);
   background:#fff;
-  color:var(--accent);
+  color:var(--rouge);
 }
 
-.toast-copie{
+.toast{
   position:fixed;
   z-index:10000;
   left:50%;
@@ -621,17 +585,16 @@ button{touch-action:manipulation}
   padding:12px 18px;
   transform:translateX(-50%) translateY(20px);
   border-radius:12px;
-  background:var(--primaire-fonce);
+  background:var(--vert-fonce);
   color:#fff;
   text-align:center;
-  font-weight:800;
+  font-weight:850;
   opacity:0;
   pointer-events:none;
   transition:.2s;
-  box-shadow:0 8px 30px rgba(0,0,0,.25);
 }
 
-.toast-copie.visible{
+.toast.visible{
   opacity:1;
   transform:translateX(-50%) translateY(0);
 }
@@ -652,23 +615,17 @@ button{touch-action:manipulation}
 <main class="page">
   <header class="entete">
     <h1>Restaurants de Neuchâtel</h1>
-    <p>Recherchez un plat, puis touchez sa fiche pour afficher les informations complètes du restaurant.</p>
+    <p>Recherchez un plat, puis ouvrez sa fiche pour consulter les informations du restaurant.</p>
   </header>
 
   <section id="zoneChargement" class="panneau">
     <h2>Chargement des restaurants</h2>
-    <p class="explication">Le fichier CSV est chargé automatiquement depuis GitHub. En cas d’échec, vous pouvez choisir un fichier enregistré sur votre appareil.</p>
+    <div id="etatChargement" class="etat">Chargement automatique du fichier CSV…</div>
 
-    <label class="fichier-label">
+    <label class="fichier-manuel">
       Choisir manuellement un fichier CSV
       <input id="fichierCsv" type="file" accept=".csv,text/csv,text/plain">
     </label>
-
-    <div id="etatChargement" class="etat">Chargement automatique en cours…</div>
-
-    <div class="memoire-info">
-      <strong>Mémoire locale :</strong> un fichier choisi manuellement peut être conservé sur cet appareil comme solution de secours.
-    </div>
   </section>
 
   <section id="application" class="cache">
@@ -696,39 +653,37 @@ button{touch-action:manipulation}
     <section class="panneau">
       <h2>Rechercher</h2>
 
-      <div class="recherche-grid">
-        <div class="recherche-zone">
-          <div class="recherche-saisie">
-            <input
-              id="recherche"
-              class="champ"
-              type="text"
-              autocomplete="off"
-              aria-autocomplete="list"
-              aria-controls="suggestions"
-              aria-expanded="false"
-              placeholder="Tapez au moins 3 lettres du plat…"
-            >
-            <button id="effacerRecherche" class="effacer-recherche cache" type="button" aria-label="Effacer la recherche">×</button>
-          </div>
-
-          <div id="suggestions" class="suggestions cache" role="listbox" aria-label="Suggestions de mots"></div>
+      <div class="recherche-zone">
+        <div class="recherche-saisie">
+          <input
+            id="recherche"
+            class="champ"
+            type="text"
+            autocomplete="off"
+            aria-autocomplete="list"
+            aria-controls="suggestions"
+            aria-expanded="false"
+            placeholder="Tapez au moins 3 lettres du plat…"
+          >
+          <button id="effacerRecherche" class="effacer-recherche cache" type="button" aria-label="Effacer la recherche">×</button>
         </div>
 
-        <div class="filtres">
-          <div class="multi-filtre">
-            <button id="boutonLocalites" class="multi-bouton" type="button" aria-expanded="false">Toutes les localités</button>
-            <div id="listeLocalites" class="multi-liste cache"></div>
-          </div>
-
-          <div class="multi-filtre">
-            <button id="boutonRestaurants" class="multi-bouton" type="button" aria-expanded="false">Tous les restaurants</button>
-            <div id="listeRestaurants" class="multi-liste cache"></div>
-          </div>
-        </div>
-
-        <button id="boutonToutAfficher" class="bouton-secondaire" type="button">Effacer les filtres</button>
+        <div id="suggestions" class="suggestions cache" role="listbox" aria-label="Suggestions de mots"></div>
       </div>
+
+      <div class="filtres">
+        <div class="multi-filtre">
+          <button id="boutonLocalites" class="multi-bouton" type="button" aria-expanded="false">Toutes les localités</button>
+          <div id="listeLocalites" class="multi-liste cache"></div>
+        </div>
+
+        <div class="multi-filtre">
+          <button id="boutonRestaurants" class="multi-bouton" type="button" aria-expanded="false">Tous les restaurants</button>
+          <div id="listeRestaurants" class="multi-liste cache"></div>
+        </div>
+      </div>
+
+      <button id="boutonToutAfficher" class="effacer-filtres" type="button">Effacer les filtres</button>
     </section>
 
     <div id="compteur" class="compteur"></div>
@@ -746,22 +701,21 @@ button{touch-action:manipulation}
   </div>
 </div>
 
-<div id="toastCopie" class="toast-copie" role="status" aria-live="polite"></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 <script>
 "use strict";
 
-/*
-  À MODIFIER UNE SEULE FOIS lors de chaque nouvelle version du CSV.
-  Le nom doit être strictement identique au fichier présent dans GitHub.
-*/
+/**********************************************************************
+ *                    MODIFIER UNIQUEMENT ICI
+ *
+ * Remplacez uniquement le nom du fichier CSV entre les guillemets.
+ * Le fichier doit être présent dans le même dépôt GitHub que index.html.
+ **********************************************************************/
 const NOM_FICHIER_CSV = "Restaurant_Neuchatel_2026-07-23.csv";
-
-/*
-  Cette clé identifie la sauvegarde locale dans le navigateur.
-  Elle ne doit pas être modifiée lors d’un simple changement de nom du CSV.
-*/
-const CLE_MEMOIRE = "restaurantsNeuchatelCsvV4";
+/**********************************************************************
+ *                    NE RIEN MODIFIER EN DESSOUS
+ **********************************************************************/
 
 const etat = {
   plats: [],
@@ -791,12 +745,12 @@ const elements = {
   compteur: document.getElementById("compteur"),
   resultats: document.getElementById("resultats"),
   modal: document.getElementById("modal"),
-  toastCopie: document.getElementById("toastCopie"),
   fermerModal: document.getElementById("fermerModal"),
-  contenuModal: document.getElementById("contenuModal")
+  contenuModal: document.getElementById("contenuModal"),
+  toast: document.getElementById("toast")
 };
 
-function nettoyerTexte(valeur){
+function normaliser(valeur){
   return String(valeur ?? "")
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g,"")
@@ -815,32 +769,21 @@ function echapperHtml(valeur){
     .replace(/'/g,"&#039;");
 }
 
-function valeurOuNonRenseignee(valeur){
+function valeurAffichee(valeur){
   const texte = String(valeur ?? "").trim();
   return texte || "Non renseigné";
 }
 
 function detecterSeparateur(texte){
-  let dansGuillemets = false;
-  const compteurs = {";":0,",":0,"\t":0};
+  const premiereLigne = String(texte).split(/\r?\n/,1)[0] || "";
+  const compteurs = {
+    ";": (premiereLigne.match(/;/g) || []).length,
+    ",": (premiereLigne.match(/,/g) || []).length,
+    "\t": (premiereLigne.match(/\t/g) || []).length
+  };
 
-  for(let i=0;i<Math.min(texte.length,10000);i++){
-    const caractere = texte[i];
-
-    if(caractere === '"'){
-      if(dansGuillemets && texte[i+1] === '"'){
-        i++;
-      }else{
-        dansGuillemets = !dansGuillemets;
-      }
-    }else if(!dansGuillemets && caractere === "\n"){
-      break;
-    }else if(!dansGuillemets && Object.prototype.hasOwnProperty.call(compteurs,caractere)){
-      compteurs[caractere]++;
-    }
-  }
-
-  return Object.entries(compteurs).sort((a,b)=>b[1]-a[1])[0][0];
+  return Object.entries(compteurs)
+    .sort((a,b)=>b[1]-a[1])[0][0];
 }
 
 function analyserCsv(texte){
@@ -871,7 +814,9 @@ function analyserCsv(texte){
       champ = "";
     }else if(caractere === "\n"){
       ligne.push(champ.replace(/\r$/,""));
-      if(ligne.some(cellule=>cellule.trim() !== "")) lignes.push(ligne);
+      if(ligne.some(cellule=>cellule.trim() !== "")){
+        lignes.push(ligne);
+      }
       ligne = [];
       champ = "";
     }else{
@@ -880,22 +825,29 @@ function analyserCsv(texte){
   }
 
   ligne.push(champ.replace(/\r$/,""));
-  if(ligne.some(cellule=>cellule.trim() !== "")) lignes.push(ligne);
+  if(ligne.some(cellule=>cellule.trim() !== "")){
+    lignes.push(ligne);
+  }
 
   if(lignes.length < 2){
-    throw new Error("Le fichier ne contient pas de données exploitables.");
+    throw new Error("Le fichier CSV ne contient pas de données.");
   }
 
   const entetes = lignes[0].map((entete,index)=>{
-    const propre = index === 0 ? entete.replace(/^\uFEFF/,"") : entete;
+    const propre = index === 0
+      ? entete.replace(/^\uFEFF/,"")
+      : entete;
+
     return propre.trim();
   });
 
   return lignes.slice(1).map(valeurs=>{
     const objet = {};
+
     entetes.forEach((entete,index)=>{
       objet[entete] = String(valeurs[index] ?? "").trim();
     });
+
     return objet;
   });
 }
@@ -904,7 +856,7 @@ function indexerColonnes(objet){
   const index = {};
 
   Object.keys(objet).forEach(cle=>{
-    index[nettoyerTexte(cle).replace(/[^a-z0-9]/g,"")] = objet[cle];
+    index[normaliser(cle).replace(/[^a-z0-9]/g,"")] = objet[cle];
   });
 
   return index;
@@ -912,7 +864,7 @@ function indexerColonnes(objet){
 
 function lireColonne(index,...noms){
   for(const nom of noms){
-    const cle = nettoyerTexte(nom).replace(/[^a-z0-9]/g,"");
+    const cle = normaliser(nom).replace(/[^a-z0-9]/g,"");
 
     if(Object.prototype.hasOwnProperty.call(index,cle)){
       return String(index[cle] ?? "").trim();
@@ -952,27 +904,38 @@ function convertirLigne(ligne,indexOriginal){
   };
 }
 
-function verifierColonnes(plats){
+function verifierDonnees(plats){
   if(!plats.length){
-    throw new Error("Aucune ligne de données n’a été trouvée.");
+    throw new Error("Aucune ligne exploitable n’a été trouvée.");
   }
 
-  const ligneValide = plats.find(p=>p.restaurant || p.plat) || plats[0];
-  const manquantes = [];
+  const ligneValide = plats.find(plat=>plat.restaurant || plat.plat);
 
-  if(!ligneValide.restaurant) manquantes.push("Nom officiel du restaurant");
-  if(!ligneValide.plat) manquantes.push("Nom du plat");
-
-  if(manquantes.length){
+  if(!ligneValide || !ligneValide.restaurant || !ligneValide.plat){
     throw new Error(
-      "Colonnes obligatoires absentes ou non reconnues : " +
-      manquantes.join(", ") +
-      "."
+      "Les colonnes « Nom officiel du restaurant » et « Nom du plat » sont obligatoires."
     );
   }
 }
 
-async function lireFichier(file){
+function chargerTexteCsv(texte,nomFichier){
+  const lignes = analyserCsv(texte);
+
+  const plats = lignes
+    .map((ligne,index)=>convertirLigne(ligne,index))
+    .filter(plat=>plat.restaurant || plat.plat);
+
+  verifierDonnees(plats);
+
+  etat.plats = plats;
+  etat.fichier = nomFichier;
+  etat.localitesSelectionnees.clear();
+  etat.restaurantsSelectionnes.clear();
+
+  initialiserApplication();
+}
+
+async function lireFichierLocal(file){
   const tampon = await file.arrayBuffer();
 
   try{
@@ -982,73 +945,82 @@ async function lireFichier(file){
   }
 }
 
-function chargerTexteCsv(texte,nomFichier,memoriser=false){
-  const lignes = analyserCsv(texte);
-
-  const plats = lignes
-    .map((ligne,index)=>convertirLigne(ligne,index))
-    .filter(p=>p.restaurant || p.plat);
-
-  verifierColonnes(plats);
-
-  etat.plats = plats;
-  etat.fichier = nomFichier || NOM_FICHIER_CSV;
-  etat.localitesSelectionnees.clear();
-  etat.restaurantsSelectionnes.clear();
-
-  if(memoriser){
-    try{
-      localStorage.setItem(
-        CLE_MEMOIRE,
-        JSON.stringify({
-          nom:etat.fichier,
-          texte
-        })
-      );
-    }catch(erreurMemoire){
-      console.warn("Mémorisation impossible",erreurMemoire);
-    }
-  }
-
-  elements.etatChargement.className = "etat succes";
-  elements.etatChargement.textContent = memoriser
-    ? "Fichier chargé et mémorisé sur cet appareil."
-    : "Fichier chargé automatiquement depuis GitHub.";
-
-  initialiserApplication();
-}
-
-async function chargerFichier(file){
+async function chargerFichierLocal(file){
   if(!file) return;
 
   elements.etatChargement.className = "etat";
-  elements.etatChargement.textContent = "Lecture du fichier en cours…";
+  elements.etatChargement.textContent = "Lecture du fichier local…";
 
   try{
-    const texte = await lireFichier(file);
-    chargerTexteCsv(texte,file.name,true);
+    const texte = await lireFichierLocal(file);
+    chargerTexteCsv(texte,file.name);
   }catch(erreur){
-    console.error(erreur);
-    etat.plats = [];
-    elements.application.classList.add("cache");
-    elements.etatChargement.className = "etat erreur";
+    afficherErreur(erreur);
+  }
+}
+
+function afficherErreur(erreur){
+  console.error(erreur);
+  elements.application.classList.add("cache");
+  elements.zoneChargement.classList.remove("cache");
+  elements.etatChargement.className = "etat erreur";
+  elements.etatChargement.textContent =
+    "Impossible de charger « " +
+    NOM_FICHIER_CSV +
+    " ». Vérifiez que le nom est exact et que le CSV se trouve dans le même dossier que index.html.";
+}
+
+async function chargerCsvGitHub(){
+  try{
+    elements.etatChargement.className = "etat";
     elements.etatChargement.textContent =
-      "Impossible de lire ce fichier. " +
-      (erreur.message || "Vérifiez son format CSV.");
+      "Chargement automatique de « " +
+      NOM_FICHIER_CSV +
+      " »…";
+
+    const url =
+      "./" +
+      encodeURIComponent(NOM_FICHIER_CSV) +
+      "?v=" +
+      Date.now();
+
+    const reponse = await fetch(url,{
+      cache:"no-store"
+    });
+
+    if(!reponse.ok){
+      throw new Error(
+        "Erreur HTTP " +
+        reponse.status +
+        " pour " +
+        NOM_FICHIER_CSV
+      );
+    }
+
+    const texte = await reponse.text();
+    chargerTexteCsv(texte,NOM_FICHIER_CSV);
+  }catch(erreur){
+    afficherErreur(erreur);
   }
 }
 
 function valeursUniques(cle){
   return [...new Set(
     etat.plats
-      .map(p=>p[cle])
+      .map(plat=>plat[cle])
       .filter(Boolean)
   )].sort((a,b)=>a.localeCompare(b,"fr",{sensitivity:"base"}));
 }
 
 function texteBoutonMultiple(selection,pluriel){
-  if(selection.size === 0) return "Tous les " + pluriel;
-  if(selection.size === 1) return [...selection][0];
+  if(selection.size === 0){
+    return "Tous les " + pluriel;
+  }
+
+  if(selection.size === 1){
+    return [...selection][0];
+  }
+
   return selection.size + " " + pluriel + " sélectionnés";
 }
 
@@ -1084,8 +1056,13 @@ function remplirListeMultiple(
         selection.delete(valeur);
       }
 
-      bouton.textContent = texteBoutonMultiple(selection,pluriel);
-      bouton.classList.toggle("actif",selection.size > 0);
+      bouton.textContent =
+        texteBoutonMultiple(selection,pluriel);
+
+      bouton.classList.toggle(
+        "actif",
+        selection.size > 0
+      );
 
       if(typeof apresModification === "function"){
         apresModification();
@@ -1096,13 +1073,20 @@ function remplirListeMultiple(
     });
   });
 
-  bouton.textContent = texteBoutonMultiple(selection,pluriel);
-  bouton.classList.toggle("actif",selection.size > 0);
+  bouton.textContent =
+    texteBoutonMultiple(selection,pluriel);
+
+  bouton.classList.toggle(
+    "actif",
+    selection.size > 0
+  );
 }
 
 function restaurantsDisponibles(){
   const lignes = etat.localitesSelectionnees.size
-    ? etat.plats.filter(plat=>etat.localitesSelectionnees.has(plat.localite))
+    ? etat.plats.filter(
+        plat=>etat.localitesSelectionnees.has(plat.localite)
+      )
     : etat.plats;
 
   return [...new Set(
@@ -1132,17 +1116,17 @@ function actualiserFiltreRestaurants(){
 }
 
 function basculerListe(bouton,liste){
-  const ouvrir = liste.classList.contains("cache");
+  const doitOuvrir = liste.classList.contains("cache");
 
-  document
-    .querySelectorAll(".multi-liste")
-    .forEach(element=>element.classList.add("cache"));
+  document.querySelectorAll(".multi-liste").forEach(element=>{
+    element.classList.add("cache");
+  });
 
-  document
-    .querySelectorAll(".multi-bouton")
-    .forEach(element=>element.setAttribute("aria-expanded","false"));
+  document.querySelectorAll(".multi-bouton").forEach(element=>{
+    element.setAttribute("aria-expanded","false");
+  });
 
-  if(ouvrir){
+  if(doitOuvrir){
     liste.classList.remove("cache");
     bouton.setAttribute("aria-expanded","true");
   }
@@ -1150,9 +1134,16 @@ function basculerListe(bouton,liste){
 
 function initialiserApplication(){
   elements.nomFichier.textContent = etat.fichier;
-  elements.nombrePlats.textContent = etat.plats.filter(p=>p.plat).length;
+
+  elements.nombrePlats.textContent =
+    etat.plats.filter(plat=>plat.plat).length;
+
   elements.nombreRestaurants.textContent =
-    new Set(etat.plats.map(p=>p.restaurant).filter(Boolean)).size;
+    new Set(
+      etat.plats
+        .map(plat=>plat.restaurant)
+        .filter(Boolean)
+    ).size;
 
   remplirListeMultiple(
     elements.listeLocalites,
@@ -1171,7 +1162,6 @@ function initialiserApplication(){
   elements.application.classList.remove("cache");
 
   afficherResultats();
-  elements.application.scrollIntoView({behavior:"smooth",block:"start"});
 }
 
 function fermerSuggestions(){
@@ -1182,7 +1172,7 @@ function fermerSuggestions(){
 }
 
 function motsSuggeres(){
-  const saisie = nettoyerTexte(elements.recherche.value);
+  const saisie = normaliser(elements.recherche.value);
 
   if(saisie.length < 3 || saisie.includes(" ")){
     return [];
@@ -1207,21 +1197,21 @@ function motsSuggeres(){
       return;
     }
 
-    const morceaux =
+    const motsDuPlat =
       String(plat.plat)
         .match(/[A-Za-zÀ-ÖØ-öø-ÿŒœÆæ'-]+/g) || [];
 
-    morceaux.forEach(motOriginal=>{
+    motsDuPlat.forEach(motOriginal=>{
       const motAffiche =
         motOriginal.replace(/^['’-]+|['’-]+$/g,"");
 
-      const motNettoye = nettoyerTexte(motAffiche);
+      const motNormalise = normaliser(motAffiche);
 
-      if(motNettoye.length < 3) return;
-      if(!motNettoye.startsWith(saisie)) return;
+      if(motNormalise.length < 3) return;
+      if(!motNormalise.startsWith(saisie)) return;
 
-      if(!mots.has(motNettoye)){
-        mots.set(motNettoye,motAffiche);
+      if(!mots.has(motNormalise)){
+        mots.set(motNormalise,motAffiche);
       }
     });
   });
@@ -1232,7 +1222,7 @@ function motsSuggeres(){
 }
 
 function afficherSuggestions(){
-  const saisie = nettoyerTexte(elements.recherche.value);
+  const saisie = normaliser(elements.recherche.value);
 
   if(saisie.length < 3 || saisie.includes(" ")){
     fermerSuggestions();
@@ -1268,7 +1258,6 @@ function afficherSuggestions(){
     const bouton = document.createElement("button");
     bouton.type = "button";
     bouton.className = "suggestion";
-    bouton.setAttribute("role","option");
     bouton.dataset.index = String(index);
     bouton.textContent = mot;
 
@@ -1292,10 +1281,14 @@ function selectionnerSuggestion(mot){
 }
 
 function gererClavierSuggestions(evenement){
-  if(elements.suggestions.classList.contains("cache")) return;
+  if(elements.suggestions.classList.contains("cache")){
+    return;
+  }
 
   const boutons =
-    Array.from(elements.suggestions.querySelectorAll(".suggestion"));
+    Array.from(
+      elements.suggestions.querySelectorAll(".suggestion")
+    );
 
   if(!boutons.length) return;
 
@@ -1332,9 +1325,9 @@ function gererClavierSuggestions(evenement){
     .scrollIntoView({block:"nearest"});
 }
 
-function obtenirResultatsFiltres(){
-  const mots =
-    nettoyerTexte(elements.recherche.value)
+function obtenirResultats(){
+  const termes =
+    normaliser(elements.recherche.value)
       .split(/\s+/)
       .filter(Boolean);
 
@@ -1355,16 +1348,24 @@ function obtenirResultatsFiltres(){
       return false;
     }
 
-    const nomDuPlat = nettoyerTexte(plat.plat);
-    return mots.every(mot=>nomDuPlat.includes(mot));
+    const nomDuPlat = normaliser(plat.plat);
+
+    return termes.every(terme=>{
+      return nomDuPlat.includes(terme);
+    });
   });
 }
 
 function formaterPrix(prix){
   const valeur = String(prix ?? "").trim();
 
-  if(!valeur) return "Prix non renseigné";
-  return /chf/i.test(valeur) ? valeur : valeur + " CHF";
+  if(!valeur){
+    return "Prix non renseigné";
+  }
+
+  return /chf/i.test(valeur)
+    ? valeur
+    : valeur + " CHF";
 }
 
 function creerCarte(plat,indexDansEtat){
@@ -1372,19 +1373,12 @@ function creerCarte(plat,indexDansEtat){
   bouton.type = "button";
   bouton.className = "carte-plat";
 
-  bouton.setAttribute(
-    "aria-label",
-    "Afficher la fiche du restaurant " +
-    plat.restaurant +
-    " pour le plat " +
-    plat.plat
-  );
-
   bouton.innerHTML = `
     <div class="carte-tete">
       <div class="resto">
-        ${echapperHtml(valeurOuNonRenseignee(plat.restaurant))}
+        ${echapperHtml(valeurAffichee(plat.restaurant))}
       </div>
+
       <div class="localite">
         ${echapperHtml(
           [plat.npa,plat.localite].filter(Boolean).join(" ") ||
@@ -1395,11 +1389,11 @@ function creerCarte(plat,indexDansEtat){
 
     <div class="carte-corps">
       <h2 class="plat">
-        ${echapperHtml(valeurOuNonRenseignee(plat.plat))}
+        ${echapperHtml(valeurAffichee(plat.plat))}
       </h2>
 
       <div class="categorie">
-        ${echapperHtml(valeurOuNonRenseignee(plat.categorie))}
+        ${echapperHtml(valeurAffichee(plat.categorie))}
       </div>
 
       ${
@@ -1415,12 +1409,12 @@ function creerCarte(plat,indexDansEtat){
       <div class="infos-rapides">
         <div>
           <strong>Fermeture :</strong>
-          ${echapperHtml(valeurOuNonRenseignee(plat.fermeture))}
+          ${echapperHtml(valeurAffichee(plat.fermeture))}
         </div>
 
         <div>
           <strong>Introduit le :</strong>
-          ${echapperHtml(valeurOuNonRenseignee(plat.dateIntroduction))}
+          ${echapperHtml(valeurAffichee(plat.dateIntroduction))}
         </div>
       </div>
 
@@ -1438,9 +1432,10 @@ function creerCarte(plat,indexDansEtat){
 }
 
 function afficherResultats(){
-  const resultats = obtenirResultatsFiltres();
+  const resultats = obtenirResultats();
 
   elements.resultats.innerHTML = "";
+
   elements.compteur.textContent =
     resultats.length +
     " résultat" +
@@ -1456,130 +1451,124 @@ function afficherResultats(){
 
   resultats.forEach(plat=>{
     const indexDansEtat = etat.plats.indexOf(plat);
-    fragment.appendChild(creerCarte(plat,indexDansEtat));
+    fragment.appendChild(
+      creerCarte(plat,indexDansEtat)
+    );
   });
 
   elements.resultats.appendChild(fragment);
 }
 
 function ligneFiche(libelle,valeur){
-  const texte = String(valeur ?? "").trim();
-
   return `
     <div class="ligne-fiche">
-      <span class="libelle">${echapperHtml(libelle)}</span>
+      <span class="libelle">
+        ${echapperHtml(libelle)}
+      </span>
+
       <div class="valeur">
-        ${echapperHtml(texte || "Non renseigné")}
+        ${echapperHtml(valeurAffichee(valeur))}
       </div>
     </div>
   `;
 }
 
 function ouvrirFiche(index){
-  const p = etat.plats[index];
-  if(!p) return;
+  const plat = etat.plats[index];
+
+  if(!plat) return;
 
   const adresse =
     [
-      p.rue,
-      [p.npa,p.localite].filter(Boolean).join(" ")
+      plat.rue,
+      [plat.npa,plat.localite].filter(Boolean).join(" ")
     ]
     .filter(Boolean)
     .join(", ");
 
   const actions = [];
 
-  if(p.telephone){
-    actions.push(`
-      <button
-        type="button"
-        class="action-lien"
-        data-copie="${echapperHtml(p.telephone)}"
-        data-message="Numéro de téléphone copié"
-      >
-        Copier le téléphone
-      </button>
-    `);
+  if(plat.telephone){
+    actions.push(
+      boutonCopie(
+        "Copier le téléphone",
+        plat.telephone,
+        "Numéro de téléphone copié",
+        ""
+      )
+    );
   }
 
-  if(p.email){
-    actions.push(`
-      <button
-        type="button"
-        class="action-lien rouge"
-        data-copie="${echapperHtml(p.email)}"
-        data-message="Adresse e-mail copiée"
-      >
-        Copier l’e-mail
-      </button>
-    `);
+  if(plat.email){
+    actions.push(
+      boutonCopie(
+        "Copier l’e-mail",
+        plat.email,
+        "Adresse e-mail copiée",
+        "rouge"
+      )
+    );
   }
 
   if(adresse){
-    actions.push(`
-      <button
-        type="button"
-        class="action-lien secondaire"
-        data-copie="${echapperHtml(adresse)}"
-        data-message="Adresse copiée"
-      >
-        Copier l’adresse
-      </button>
-    `);
+    actions.push(
+      boutonCopie(
+        "Copier l’adresse",
+        adresse,
+        "Adresse copiée",
+        "secondaire"
+      )
+    );
   }
 
-  if(p.site){
-    actions.push(`
-      <button
-        type="button"
-        class="action-lien rouge"
-        data-copie="${echapperHtml(p.site)}"
-        data-message="Adresse du site copiée"
-      >
-        Copier le site Internet
-      </button>
-    `);
+  if(plat.site){
+    actions.push(
+      boutonCopie(
+        "Copier le site Internet",
+        plat.site,
+        "Adresse du site copiée",
+        "rouge"
+      )
+    );
   }
 
-  if(p.lienMenu){
-    actions.push(`
-      <button
-        type="button"
-        class="action-lien secondaire"
-        data-copie="${echapperHtml(p.lienMenu)}"
-        data-message="Lien du menu copié"
-      >
-        Copier le lien du menu
-      </button>
-    `);
+  if(plat.lienMenu){
+    actions.push(
+      boutonCopie(
+        "Copier le lien du menu",
+        plat.lienMenu,
+        "Lien du menu copié",
+        "secondaire"
+      )
+    );
   }
 
-  const provenance =
-    nettoyerTexte(p.fourniPar) === "web"
+  const provenancePrincipale =
+    normaliser(plat.fourniPar) === "web"
       ? "Personne du groupe"
-      : valeurOuNonRenseignee(p.fourniPar);
+      : valeurAffichee(plat.fourniPar);
 
   elements.contenuModal.innerHTML = `
     <section class="bloc plat-selectionne">
       <h3>Plat sélectionné</h3>
 
-      ${ligneFiche("Nom du plat",p.plat)}
-      ${ligneFiche("Catégorie",p.categorie)}
-      ${ligneFiche("Description",p.description)}
-      ${ligneFiche("Prix",formaterPrix(p.prix))}
-      ${ligneFiche("Localité",[p.npa,p.localite].filter(Boolean).join(" "))}
-      ${ligneFiche("Jours de fermeture",p.fermeture)}
-      ${ligneFiche("Date d’introduction",p.dateIntroduction)}
+      ${ligneFiche("Nom du plat",plat.plat)}
+      ${ligneFiche("Catégorie",plat.categorie)}
+      ${ligneFiche("Description",plat.description)}
+      ${ligneFiche("Prix",formaterPrix(plat.prix))}
+      ${ligneFiche("Localité",[plat.npa,plat.localite].filter(Boolean).join(" "))}
+      ${ligneFiche("Jours de fermeture",plat.fermeture)}
+      ${ligneFiche("Date d’introduction",plat.dateIntroduction)}
     </section>
 
-    <section class="bloc alerte-fermeture">
-      <h3>${echapperHtml(valeurOuNonRenseignee(p.restaurant))}</h3>
+    <section class="bloc restaurant-selectionne">
+      <h3>${echapperHtml(valeurAffichee(plat.restaurant))}</h3>
 
       <div class="fiche-grid">
         ${ligneFiche("Adresse",adresse)}
-        ${ligneFiche("Téléphone",p.telephone)}
-        ${ligneFiche("E-mail",p.email)}
-        ${ligneFiche("Jours de fermeture",p.fermeture)}
+        ${ligneFiche("Téléphone",plat.telephone)}
+        ${ligneFiche("E-mail",plat.email)}
+        ${ligneFiche("Jours de fermeture",plat.fermeture)}
       </div>
     </section>
 
@@ -1587,39 +1576,32 @@ function ouvrirFiche(index){
       <h3>Fiche technique du restaurant</h3>
 
       <div class="fiche-grid">
-        ${ligneFiche("Type de cuisine",p.typeCuisine)}
-        ${ligneFiche("Terrasse",p.terrasse)}
-        ${ligneFiche("Horaires",p.horaires)}
-        ${ligneFiche("Date du menu",p.dateMenu)}
-        ${ligneFiche("Date d’introduction",p.dateIntroduction)}
-        ${ligneFiche("Date d’introduction du fichier",p.dateIntroductionFichier)}
-        ${ligneFiche("Date de récupération Web",p.dateRecuperation)}
+        ${ligneFiche("Type de cuisine",plat.typeCuisine)}
+        ${ligneFiche("Terrasse",plat.terrasse)}
+        ${ligneFiche("Horaires",plat.horaires)}
+        ${ligneFiche("Date du menu",plat.dateMenu)}
+        ${ligneFiche("Date d’introduction",plat.dateIntroduction)}
+        ${ligneFiche("Date d’introduction du fichier",plat.dateIntroductionFichier)}
+        ${ligneFiche("Date de récupération Web",plat.dateRecuperation)}
         ${ligneFiche("Fichier source",etat.fichier)}
       </div>
 
       <div class="provenance">
         <span class="libelle">Provenance des informations</span>
-        <div class="valeur">${echapperHtml(provenance)}</div>
+        <div class="valeur">
+          ${echapperHtml(provenancePrincipale)}
+        </div>
 
         ${
-          p.origineContributeur
-            ? `<div class="valeur">${echapperHtml(p.origineContributeur)}</div>`
+          plat.origineContributeur
+            ? `<div class="valeur">${echapperHtml(plat.origineContributeur)}</div>`
             : ""
         }
       </div>
 
       ${
         actions.length
-          ? `
-            <div class="note-liens">
-              <strong>Copie des coordonnées :</strong>
-              les boutons copient les informations. Vous pouvez ensuite les coller dans Téléphone, Mail, Safari ou Plans.
-            </div>
-
-            <div class="actions">
-              ${actions.join("")}
-            </div>
-          `
+          ? `<div class="actions">${actions.join("")}</div>`
           : ""
       }
     </section>
@@ -1630,14 +1612,32 @@ function ouvrirFiche(index){
   elements.fermerModal.focus();
 }
 
+function boutonCopie(libelle,valeur,message,classe){
+  return `
+    <button
+      type="button"
+      class="action-copie ${classe}"
+      data-copie="${echapperHtml(valeur)}"
+      data-message="${echapperHtml(message)}"
+    >
+      ${echapperHtml(libelle)}
+    </button>
+  `;
+}
+
+function fermerFiche(){
+  elements.modal.classList.add("cache");
+  document.body.style.overflow = "";
+}
+
 function afficherToast(message){
-  elements.toastCopie.textContent = message;
-  elements.toastCopie.classList.add("visible");
+  elements.toast.textContent = message;
+  elements.toast.classList.add("visible");
 
   clearTimeout(afficherToast.minuterie);
 
   afficherToast.minuterie = setTimeout(()=>{
-    elements.toastCopie.classList.remove("visible");
+    elements.toast.classList.remove("visible");
   },2200);
 }
 
@@ -1658,15 +1658,10 @@ async function copierTexte(texte,message){
       zone.remove();
     }
 
-    afficherToast(message || "Information copiée");
+    afficherToast(message);
   }catch(erreur){
-    afficherToast("Copie impossible. Maintenez le texte appuyé pour le copier.");
+    afficherToast("Copie impossible");
   }
-}
-
-function fermerFiche(){
-  elements.modal.classList.add("cache");
-  document.body.style.overflow = "";
 }
 
 function reinitialiserFiltres(){
@@ -1686,90 +1681,12 @@ function reinitialiserFiltres(){
   );
 
   actualiserFiltreRestaurants();
-
-  document
-    .querySelectorAll(".multi-liste")
-    .forEach(element=>element.classList.add("cache"));
-
   fermerSuggestions();
   afficherResultats();
-  elements.recherche.focus();
-}
-
-function chargerDepuisMemoire(){
-  try{
-    const sauvegarde = localStorage.getItem(CLE_MEMOIRE);
-
-    if(!sauvegarde){
-      throw new Error("Aucun fichier mémorisé.");
-    }
-
-    const donnees = JSON.parse(sauvegarde);
-
-    if(!donnees || !donnees.texte){
-      throw new Error("Sauvegarde vide.");
-    }
-
-    chargerTexteCsv(
-      donnees.texte,
-      donnees.nom || NOM_FICHIER_CSV,
-      false
-    );
-
-    elements.etatChargement.textContent =
-      "Le fichier GitHub n’a pas pu être chargé. La copie locale a été utilisée.";
-  }catch(erreur){
-    console.warn(erreur);
-
-    elements.etatChargement.className = "etat erreur";
-    elements.etatChargement.textContent =
-      "Le fichier automatique n’a pas pu être chargé. Choisissez le CSV manuellement.";
-  }
-}
-
-async function chargerCsvGitHub(){
-  try{
-    elements.etatChargement.className = "etat";
-    elements.etatChargement.textContent =
-      "Chargement automatique de " + NOM_FICHIER_CSV + "…";
-
-    const reponse = await fetch(
-      "./" + encodeURIComponent(NOM_FICHIER_CSV),
-      {cache:"no-store"}
-    );
-
-    if(!reponse.ok){
-      throw new Error(
-        "Erreur HTTP " +
-        reponse.status +
-        " lors du chargement de " +
-        NOM_FICHIER_CSV
-      );
-    }
-
-    const texte = await reponse.text();
-
-    chargerTexteCsv(
-      texte,
-      NOM_FICHIER_CSV,
-      false
-    );
-  }catch(erreur){
-    console.error(erreur);
-
-    elements.application.classList.add("cache");
-    elements.zoneChargement.classList.remove("cache");
-
-    elements.etatChargement.className = "etat erreur";
-    elements.etatChargement.textContent =
-      "Impossible de charger le fichier " +
-      NOM_FICHIER_CSV +
-      ". Vérifiez que le fichier CSV se trouve dans le même dossier que index.html.";
-  }
 }
 
 elements.fichierCsv.addEventListener("change",evenement=>{
-  chargerFichier(evenement.target.files[0]);
+  chargerFichierLocal(evenement.target.files[0]);
 });
 
 elements.boutonChanger.addEventListener("click",()=>{
@@ -1786,6 +1703,16 @@ elements.recherche.addEventListener("input",()=>{
   afficherSuggestions();
 });
 
+elements.recherche.addEventListener(
+  "focus",
+  afficherSuggestions
+);
+
+elements.recherche.addEventListener(
+  "keydown",
+  gererClavierSuggestions
+);
+
 elements.effacerRecherche.addEventListener("click",()=>{
   elements.recherche.value = "";
   elements.effacerRecherche.classList.add("cache");
@@ -1793,9 +1720,6 @@ elements.effacerRecherche.addEventListener("click",()=>{
   afficherResultats();
   elements.recherche.focus();
 });
-
-elements.recherche.addEventListener("focus",afficherSuggestions);
-elements.recherche.addEventListener("keydown",gererClavierSuggestions);
 
 elements.boutonLocalites.addEventListener("click",()=>{
   basculerListe(
@@ -1816,13 +1740,21 @@ elements.boutonToutAfficher.addEventListener(
   reinitialiserFiltres
 );
 
-elements.fermerModal.addEventListener("click",fermerFiche);
+elements.fermerModal.addEventListener(
+  "click",
+  fermerFiche
+);
+
+elements.modal.addEventListener("click",evenement=>{
+  if(evenement.target === elements.modal){
+    fermerFiche();
+  }
+});
 
 elements.contenuModal.addEventListener("click",evenement=>{
   const bouton = evenement.target.closest("[data-copie]");
-  if(!bouton) return;
 
-  evenement.preventDefault();
+  if(!bouton) return;
 
   copierTexte(
     bouton.dataset.copie || "",
@@ -1830,9 +1762,19 @@ elements.contenuModal.addEventListener("click",evenement=>{
   );
 });
 
-elements.modal.addEventListener("click",evenement=>{
-  if(evenement.target === elements.modal){
-    fermerFiche();
+document.addEventListener("click",evenement=>{
+  if(!evenement.target.closest(".recherche-zone")){
+    fermerSuggestions();
+  }
+
+  if(!evenement.target.closest(".multi-filtre")){
+    document.querySelectorAll(".multi-liste").forEach(element=>{
+      element.classList.add("cache");
+    });
+
+    document.querySelectorAll(".multi-bouton").forEach(element=>{
+      element.setAttribute("aria-expanded","false");
+    });
   }
 });
 
@@ -1845,23 +1787,8 @@ document.addEventListener("keydown",evenement=>{
   }
 });
 
-document.addEventListener("click",evenement=>{
-  if(!evenement.target.closest(".recherche-zone")){
-    fermerSuggestions();
-  }
-
-  if(!evenement.target.closest(".multi-filtre")){
-    document
-      .querySelectorAll(".multi-liste")
-      .forEach(element=>element.classList.add("cache"));
-
-    document
-      .querySelectorAll(".multi-bouton")
-      .forEach(element=>element.setAttribute("aria-expanded","false"));
-  }
-});
-
 chargerCsvGitHub();
 </script>
 </body>
 </html>
+
